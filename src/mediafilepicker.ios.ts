@@ -5,24 +5,16 @@ import * as fs from "tns-core-modules/file-system/file-system"
 
 declare var GMImagePickerController, GMImagePickerControllerDelegate, NSDocumentDirectory, NSUserDomainMask, PHAssetMediaTypeImage, PHAssetMediaTypeVideo;
 
+var owner;
+var delegate;
 export class MediafilepickerDeligate extends NSObject {
 
         public static ObjCProtocols = [GMImagePickerControllerDelegate];
 
-        private _owner: WeakRef<Mediafilepicker>;
-
-        public static initWithOwner(owner: WeakRef<Mediafilepicker>): MediafilepickerDeligate {
-
-                let deligate = <MediafilepickerDeligate>MediafilepickerDeligate.new();
-                deligate._owner = owner;
-
-                return deligate;
-        }
-
         public assetsPickerControllerDidFinishPickingAssets(picker, assetArray: NSArray<any>) {
 
                 picker.dismissViewControllerAnimatedCompletion(true, null);
-                this._owner.get().getFiles(assetArray);
+                owner.getFiles(assetArray);
         }
 }
 
@@ -37,7 +29,9 @@ export class Mediafilepicker extends Common implements CommonFilePicker {
                 let options = params.ios;
 
                 let picker = GMImagePickerController.alloc().init();
-                picker.delegate = MediafilepickerDeligate.initWithOwner(new WeakRef(this));
+                owner = this;
+                delegate = <MediafilepickerDeligate>MediafilepickerDeligate.new();
+                picker.delegate = delegate;
 
                 //options
 
