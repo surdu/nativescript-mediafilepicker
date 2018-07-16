@@ -5,16 +5,16 @@ import * as fs from "tns-core-modules/file-system/file-system"
 
 declare var GMImagePickerController, GMImagePickerControllerDelegate, NSDocumentDirectory, NSUserDomainMask, PHAssetMediaTypeImage, PHAssetMediaTypeVideo;
 
-var owner;
 var delegate;
 export class MediafilepickerDeligate extends NSObject {
 
+        public owner;
         public static ObjCProtocols = [GMImagePickerControllerDelegate];
 
         public assetsPickerControllerDidFinishPickingAssets(picker, assetArray: NSArray<any>) {
 
                 picker.dismissViewControllerAnimatedCompletion(true, null);
-                owner.getFiles(assetArray);
+                this.owner.getFiles(assetArray);
         }
 }
 
@@ -23,14 +23,13 @@ export class Mediafilepicker extends Common implements CommonFilePicker {
         public output = "";
 
         public startFilePicker(params: MediaFilepickerOptions) {
-
                 let folder = fs.knownFolders.documents();
                 folder.getFolder("filepicker");
                 let options = params.ios;
 
                 let picker = GMImagePickerController.alloc().init();
-                owner = this;
                 delegate = <MediafilepickerDeligate>MediafilepickerDeligate.new();
+                delegate.owner = this;
                 picker.delegate = delegate;
 
                 //options

@@ -1,5 +1,6 @@
 import { Common, CommonFilePicker, MediaFilepickerOptions } from './mediafilepicker.common';
 export declare class MediafilepickerDeligate extends NSObject {
+    owner: any;
     static ObjCProtocols: any[];
     assetsPickerControllerDidFinishPickingAssets(picker: any, assetArray: NSArray<any>): void;
 }
