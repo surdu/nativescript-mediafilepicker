@@ -125,7 +125,9 @@ export class Mediafilepicker extends Common implements CommonFilePicker {
 
                                 } else if (data.mediaType == PHAssetMediaType.Video) {
 
-                                        let uriVideoRequestOptions = PHVideoRequestOptions.alloc().init()
+                                        let uriVideoRequestOptions = PHVideoRequestOptions.alloc().init();
+                                        uriVideoRequestOptions.version = PHVideoRequestOptionsVersion.Original;
+                                        uriVideoRequestOptions.networkAccessAllowed = true;
                                         PHImageManager.defaultManager().requestAVAssetForVideoOptionsResultHandler(data, uriVideoRequestOptions, (data, audioMix, info) => {
 
                                                 let urlAsset = data as AVURLAsset;
